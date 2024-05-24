@@ -91,7 +91,7 @@
             const idEstudiante = document.getElementById('updateIdEstudiante').value;
             const notaEstudiante = document.getElementById('updateNotaEstudiante').value.split(',').map(Number);
 
-            fetch(`http://localhost:4000/notas/${idEstudiante}`, {
+            fetch(`http://localhost:4000/notes/${idEstudiante}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -111,7 +111,7 @@
             event.preventDefault();
             const idEstudiante = document.getElementById('deleteIdEstudiante').value;
 
-            fetch(`http://localhost:4000/notas/${idEstudiante}`, {
+            fetch(`http://localhost:4000/notes/${idEstudiante}`, {
                 method: 'DELETE'
             })
             .then(response => response.json())

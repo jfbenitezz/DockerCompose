@@ -38,7 +38,7 @@
             const username = document.getElementById('signUpUsername').value;
             const password = document.getElementById('signUpPassword').value;
 
-            fetch(`${proxyUrl}/auth/signUp`, {
+            fetch(`auth/auth/signUp`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -59,7 +59,7 @@
             const username = document.getElementById('logInUsername').value;
             const password = document.getElementById('logInPassword').value;
 
-            fetch(`${proxyUrl}/auth/logIn`, {
+            fetch(`auth/auth/logIn`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

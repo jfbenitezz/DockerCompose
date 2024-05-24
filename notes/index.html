@@ -47,12 +47,13 @@
     </form>
 
     <script>
+
         document.getElementById('addNotesForm').addEventListener('submit', function(event) {
             event.preventDefault();
             const idEstudiante = document.getElementById('addIdEstudiante').value;
             const notaEstudiante = document.getElementById('addNotaEstudiante').value.split(',').map(Number);
 
-            fetch('http://localhost:4000/notes', {
+            fetch(`notes`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -72,7 +73,7 @@
             event.preventDefault();
             const idEstudiante = document.getElementById('getIdEstudiante').value;
 
-            fetch(`http://localhost:4000/notes/${idEstudiante}`)
+            fetch(`notes/${idEstudiante}`)
             .then(response => response.json())
             .then(data => {
                 if (data.notas) {
@@ -91,7 +92,7 @@
             const idEstudiante = document.getElementById('updateIdEstudiante').value;
             const notaEstudiante = document.getElementById('updateNotaEstudiante').value.split(',').map(Number);
 
-            fetch(`http://localhost:4000/notas/${idEstudiante}`, {
+            fetch(`notes/${idEstudiante}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -111,7 +112,7 @@
             event.preventDefault();
             const idEstudiante = document.getElementById('deleteIdEstudiante').value;
 
-            fetch(`http://localhost:4000/notas/${idEstudiante}`, {
+            fetch(`notes/${idEstudiante}`, {
                 method: 'DELETE'
             })
             .then(response => response.json())

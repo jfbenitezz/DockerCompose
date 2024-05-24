@@ -1,23 +1,26 @@
-// server.js
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 const PORT = 3000;
 
-// Middleware para habilitar CORS
+// Middleware
 app.use(cors());
-
-// Middleware para parsear JSON
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname)));
 
-// Diccionario para almacenar usuarios en memoria
-const users = {};
+// Ruta para servir el archivo HTML
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Simulación de base de datos en memoria
+let users = {};
 
 // Endpoint para registrarse (signUp)
-app.post('/signUp', (req, res) => {
+app.post('/auth/signUp', (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
@@ -28,13 +31,12 @@ app.post('/signUp', (req, res) => {
         return res.status(400).json({ message: 'User already exists.' });
     }
 
-    // Guardar el nuevo usuario en el diccionario
     users[username] = { password };
     res.status(201).json({ message: 'User registered successfully.' });
 });
 
 // Endpoint para iniciar sesión (logIn)
-app.post('/logIn', (req, res) => {
+app.post('/auth/logIn', (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
@@ -50,6 +52,7 @@ app.post('/logIn', (req, res) => {
     res.status(200).json({ message: 'Login successful.' });
 });
 
+// Iniciar el servidor
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Auth service is running on http://localhost:${PORT}`);
 });

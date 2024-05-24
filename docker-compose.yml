@@ -1,19 +1,17 @@
 version: '3'
-
 services:
   proxy:
-    build:
-      context: .
-      dockerfile: Dockerfile_proxy
+    build: ./proxy
     ports:
       - "4000:4000"
-
+    depends_on:
+      - auth
+      - notes
   auth:
-    build:
-      context: .
-      dockerfile: Dockerfile_auth
-
+    build: ./auth
+    expose:
+      - "3000"
   notes:
-    build:
-      context: .
-      dockerfile: Dockerfile_notes
+    build: ./notes
+    expose:
+      - "3001"

@@ -1,25 +1,26 @@
-// server.js
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 const PORT = 3001;
 
-// Middleware para habilitar CORS y parsear JSON
 app.use(cors());
 app.use(bodyParser.json());
 
-// Diccionario para almacenar notas en memoria
+// Ruta para servir el archivo HTML
+app.use(express.static(path.join(__dirname)));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 const notas = {};
 
 // CRUD Endpoints
-
-// Create a new student or add a note to an existing student
-app.post('/', (req, res) => {
+app.post('/notes', (req, res) => {
     const { idEstudiante, notaEstudiante } = req.body;
-    console.log(req.body)
 
     if (!idEstudiante || notaEstudiante === undefined) {
         return res.status(400).json({ message: 'idEstudiante and notaEstudiante are required.' });
@@ -37,8 +38,7 @@ app.post('/', (req, res) => {
     res.status(201).json({ message: 'Notes added successfully.', notas: notas[idEstudiante] });
 });
 
-// Read notes of a student
-app.get('/:idEstudiante', (req, res) => {
+app.get('/notes/:idEstudiante', (req, res) => {
     const { idEstudiante } = req.params;
 
     if (!notas[idEstudiante]) {
@@ -48,8 +48,7 @@ app.get('/:idEstudiante', (req, res) => {
     res.status(200).json({ notas: notas[idEstudiante] });
 });
 
-// Update notes of a student
-app.put('/:idEstudiante', (req, res) => {
+app.put('/notes/:idEstudiante', (req, res) => {
     const { idEstudiante } = req.params;
     const { notaEstudiante } = req.body;
 
@@ -65,8 +64,7 @@ app.put('/:idEstudiante', (req, res) => {
     res.status(200).json({ message: 'Notes updated successfully.', notas: notas[idEstudiante] });
 });
 
-// Delete notes of a student
-app.delete('/:idEstudiante', (req, res) => {
+app.delete('/notes/:idEstudiante', (req, res) => {
     const { idEstudiante } = req.params;
 
     if (!notas[idEstudiante]) {
@@ -78,5 +76,5 @@ app.delete('/:idEstudiante', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Notes service is running on http://localhost:${PORT}`);
 });

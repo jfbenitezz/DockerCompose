@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Service</title>
+</head>
+<body>
+    <h1>Authentication Service</h1>
+
+    <h2>Sign Up</h2>
+    <form id="signUpForm">
+        <label for="signUpUsername">Username:</label>
+        <input type="text" id="signUpUsername" name="username" required>
+        <br>
+        <label for="signUpPassword">Password:</label>
+        <input type="password" id="signUpPassword" name="password" required>
+        <br>
+        <button type="submit">Sign Up</button>
+    </form>
+
+    <h2>Log In</h2>
+    <form id="logInForm">
+        <label for="logInUsername">Username:</label>
+        <input type="text" id="logInUsername" name="username" required>
+        <br>
+        <label for="logInPassword">Password:</label>
+        <input type="password" id="logInPassword" name="password" required>
+        <br>
+        <button type="submit">Log In</button>
+    </form>
+
+    <script>
+        const proxyUrl = 'http://localhost:4000';
+
+        document.getElementById('signUpForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('signUpUsername').value;
+            const password = document.getElementById('signUpPassword').value;
+
+            fetch(`${proxyUrl}/auth/signUp`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        document.getElementById('logInForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('logInUsername').value;
+            const password = document.getElementById('logInPassword').value;
+
+            fetch(`${proxyUrl}/auth/logIn`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

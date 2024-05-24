@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notas de Estudiantes</title>
+</head>
+<body>
+    <h1>Notas de Estudiantes</h1>
+
+    <h2>Agregar Notas</h2>
+    <form id="addNotesForm">
+        <label for="addIdEstudiante">ID Estudiante:</label>
+        <input type="text" id="addIdEstudiante" name="idEstudiante" required>
+        <br>
+        <label for="addNotaEstudiante">Notas (separadas por comas):</label>
+        <input type="text" id="addNotaEstudiante" name="notaEstudiante" required>
+        <br>
+        <button type="submit">Agregar Notas</button>
+    </form>
+
+    <h2>Obtener Notas</h2>
+    <form id="getNotesForm">
+        <label for="getIdEstudiante">ID Estudiante:</label>
+        <input type="text" id="getIdEstudiante" name="idEstudiante" required>
+        <br>
+        <button type="submit">Obtener Notas</button>
+    </form>
+
+    <h2>Actualizar Notas</h2>
+    <form id="updateNotesForm">
+        <label for="updateIdEstudiante">ID Estudiante:</label>
+        <input type="text" id="updateIdEstudiante" name="idEstudiante" required>
+        <br>
+        <label for="updateNotaEstudiante">Notas (separadas por comas):</label>
+        <input type="text" id="updateNotaEstudiante" name="notaEstudiante" required>
+        <br>
+        <button type="submit">Actualizar Notas</button>
+    </form>
+
+    <h2>Eliminar Notas</h2>
+    <form id="deleteNotesForm">
+        <label for="deleteIdEstudiante">ID Estudiante:</label>
+        <input type="text" id="deleteIdEstudiante" name="idEstudiante" required>
+        <br>
+        <button type="submit">Eliminar Notas</button>
+    </form>
+
+    <script>
+        document.getElementById('addNotesForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const idEstudiante = document.getElementById('addIdEstudiante').value;
+            const notaEstudiante = document.getElementById('addNotaEstudiante').value.split(',').map(Number);
+
+            fetch('http://localhost:4000/notes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ idEstudiante, notaEstudiante })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        document.getElementById('getNotesForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const idEstudiante = document.getElementById('getIdEstudiante').value;
+
+            fetch(`http://localhost:4000/notes/${idEstudiante}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.notas) {
+                    alert(`Notas: ${data.notas.join(', ')}`);
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        document.getElementById('updateNotesForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const idEstudiante = document.getElementById('updateIdEstudiante').value;
+            const notaEstudiante = document.getElementById('updateNotaEstudiante').value.split(',').map(Number);
+
+            fetch(`http://localhost:4000/notas/${idEstudiante}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ notaEstudiante })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        document.getElementById('deleteNotesForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const idEstudiante = document.getElementById('deleteIdEstudiante').value;
+
+            fetch(`http://localhost:4000/notas/${idEstudiante}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

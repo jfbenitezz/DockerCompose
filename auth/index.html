@@ -66,9 +66,18 @@
                 },
                 body: JSON.stringify({ username, password })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (response.ok) {
+                    // Redirect to notes page on successful login
+                    window.location.href = '../notes/index.html';
+                } else {
+                    return response.json();
+                }
+            })
             .then(data => {
-                alert(data.message);
+                if (data) {
+                    alert(data.message);
+                }
             })
             .catch(error => {
                 console.error('Error:', error);
